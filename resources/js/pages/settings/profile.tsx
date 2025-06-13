@@ -33,10 +33,6 @@ export default function Profile({ mustVerifyEmail, status, roles, rolesUser }: {
     const isAdmin = rolesUser.some((role: Roles) => role.name === 'admin');
     const rolesUserText = rolesUser.map((role: Roles) => rolesUser.length > 1 ? role.label + ' | ' : role.label);
 
-    console.log('====================================');
-    console.log('ici ', isAdmin, rolesUserText, rolesUser.length);
-    console.log('====================================');
-
     //SELECT
     const [selectedRoles, setSelectedRoles] = useState(rolesUser);
     //UseMemo for retech option in select

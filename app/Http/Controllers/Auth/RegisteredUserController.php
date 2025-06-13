@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
-use EdouardLamy\PackageLaravelFingerprintLamy\Facades\Fingerprint;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,9 +20,7 @@ class RegisteredUserController extends Controller
      * Show the registration page.
      */
     public function create(): Response
-    {
-       Fingerprint::get();
-        
+    {        
         return Inertia::render('auth/register');
     }
 
