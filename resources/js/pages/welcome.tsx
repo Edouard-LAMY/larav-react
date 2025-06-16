@@ -3,17 +3,19 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import FingerprintScriptLoader from '@/components/FingerprintScriptLoader';
 import { useUsers } from '../lib/query';
 import  NavFront from '@/components/ui/NavFront';
+import { SkeletonCard } from '@/components/ui/SkeletonCard';
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
 
     const { data: users, isLoading: usersLoading, error: usersError } = useUsers();
-    console.log('====================================');
-    console.log('dans welcome ', users, usersLoading, usersError);
-    console.log('====================================');
 
-    if (usersLoading) return <p>Chargement...</p>;
+    // if (usersLoading) return <p>Chargement...</p>;
     // if (error) return <p>Erreur</p>;
+
+    console.log('====================================');
+    console.log('ici et la ', usersLoading, users);
+    console.log('====================================');
 
     return (
         <>
@@ -46,13 +48,17 @@ export default function Welcome() {
                         )}
                     </div>
                 </header>
-                <div >
-                    <ul className='columns-3 gap-8 mb-5'>
-                        {users.map((user: User) => (
-                            <li key={user.id} className="flex-1 rounded-lg bg-white p-6 pb-12 text-[13px] leading-[20px] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] lg:p-20 dark:text-[#000000] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]">{user.lastname} {user.firstname}</li>
-                        ))}
-                    </ul>
-                </div>
+                {!usersLoading ? (
+                    <div>
+                        <ul className='columns-3 gap-8 mb-5'>
+                            {users?.map((user: User) => (
+                                <li key={user.id} className="flex-1 rounded-lg bg-white p-6 pb-12 text-[13px] leading-[20px] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] lg:p-20 dark:text-[#000000] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]">{user.lastname} {user.firstname}</li>
+                            ))}
+                        </ul>
+                    </div>
+                ) : (
+                    <SkeletonCard repeat={3} />
+                )}
             </div>
         </>
     );

@@ -1,3 +1,4 @@
+import { User } from '@/types';
 import api from './api';
 import { QueryKey, useQuery } from '@tanstack/react-query';
 
@@ -9,8 +10,8 @@ export const queryKeys = {
 };
 
 // Fonctions de fetch
-export const fetchUsers = async () => {
-  const { data } = await api.get('/users');
+export const fetchUsers = async (): Promise<User[]> => {
+  const { data } = await api.get<User[]>('/users');
   return data;
 };
 
