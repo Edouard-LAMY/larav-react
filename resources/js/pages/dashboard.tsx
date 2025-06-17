@@ -1,7 +1,9 @@
+import { SliderCreate } from '@/components/Sliders/SliderCreate';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
+import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -11,6 +13,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Dashboard({userCounter}: {userCounter: number}) {
+
+    // Modal Create Slider
+    const [isModalCreateSliderOpen, setModalCreateSliderOpen] = useState<boolean>(false);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
@@ -39,6 +45,13 @@ export default function Dashboard({userCounter}: {userCounter: number}) {
                 </div>
                 <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
                     <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+                </div>
+                {/* SLIDERS */}
+                <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
+                    <button onClick={() => setModalCreateSliderOpen(true)} className="absolute top-2 right-2 rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b] cursor-pointer">
+                        Créer un slider
+                    </button>
+                    <SliderCreate open={isModalCreateSliderOpen} onClose={() => setModalCreateSliderOpen(!isModalCreateSliderOpen)} />
                 </div>
             </div>
         </AppLayout>

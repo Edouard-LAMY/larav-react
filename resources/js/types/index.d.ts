@@ -49,3 +49,27 @@ export type Roles = {
     name: string;
     label: string;
 }
+
+// ------- SLIDERS -------
+export type Slider = {
+    id: number;
+    title: string;
+    subtitle: string;
+    message: string;
+    title_color: string;
+    subtitle_color: string;
+    background_color: string;
+    text_button: string;
+    button_style: ButtonStyle;
+    button_link: string;
+    image_id: number;
+    is_active: boolean;
+}
+
+// ------ IMAGES ------ 
+export type Image = {
+    id: number;
+    name: string;
+    legend: string;
+    alt: string;
+}

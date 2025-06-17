@@ -1,7 +1,8 @@
-import { User } from '@/types';
+import { Slider, User } from '@/types';
 import api from './api';
 import { QueryKey, useQuery } from '@tanstack/react-query';
 
+// ------------------- USERS ------------------ //
 // Query Keys centralisés
 export const queryKeys = {
   users: ['users'] as QueryKey,
@@ -16,7 +17,7 @@ export const fetchUsers = async (): Promise<User[]> => {
 };
 
 export const fetchUserById = async (id: number) => {
-  const { data } = await api.get(`/users/${id}`);
+  const { data } = await api.get(`/user/${id}`);
   return data;
 };
 
@@ -38,3 +39,10 @@ export const useUser = (id: number) =>
     queryFn: () => fetchUserById(id),
     enabled: !!id, // évite les requêtes inutiles
   });
+
+
+// ------------------- SLIDERS ------------------ //
+export const fetchSliders = async (): Promise<Slider[]> => {
+  const { data } = await api.get<Slider[]>('/settings/sliders');
+  return data;
+}
