@@ -23,16 +23,7 @@ class ImageController extends Controller
         //Manage pagination according to request
         $images->appends(request()->input())->links();
 
-        return view('press.admin.image.index', ['images' => $images]);
-    }
-
-    /**
-     * Returns the new Image form view.
-     */
-    public function create(): View
-    {
-        return view('press.admin.image.create', [
-        ]);
+        return view('image.index', ['images' => $images]);
     }
 
     /**
@@ -59,7 +50,7 @@ class ImageController extends Controller
 
         $image->save();
 
-        return redirect('/admin/contenu/image/liste')->with('saved', $image);
+        return back()->with('saved', $image->id);
     }
 
     /**

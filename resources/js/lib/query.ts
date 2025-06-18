@@ -1,4 +1,4 @@
-import { Slider, User } from '@/types';
+import { Image, Slider, User } from '@/types';
 import api from './api';
 import { QueryKey, useQuery } from '@tanstack/react-query';
 
@@ -43,6 +43,12 @@ export const useUser = (id: number) =>
 
 // ------------------- SLIDERS ------------------ //
 export const fetchSliders = async (): Promise<Slider[]> => {
-  const { data } = await api.get<Slider[]>('/settings/sliders');
+  const { data } = await api.post<Slider[]>('/settings/create-slider');
+  return data;
+}
+
+// ------------------- IMAGE ------------------ //
+export const fetchImage = async (formData: FormData): Promise<Image> => {
+  const { data } = await api.post<Image>('settings/create-image', formData);
   return data;
 }

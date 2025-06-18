@@ -32,7 +32,7 @@ class SliderRequest extends FormRequest
             'button_style'      => 'string|nullable',
             'button_link'       => 'required',
             'image_id'          => 'required|integer',
-            'is_active'         => 'integer',
+            'is_active'         => 'boolean',
         ];
     }
 
@@ -51,7 +51,7 @@ class SliderRequest extends FormRequest
             'button_link.required'              => 'Un lien pour le bouton est obligatoire.',
             'image_id.integer'                  => 'L\'image doit être un entier.',
             'image_id.required'                 => 'Une image est obligatoire.',
-            'is_active.integer'                 => 'L\'activation doit être un entier.',
+            'is_active.boolean'                 => 'L\'activation doit être un booléen.',
         ];
     }
 }

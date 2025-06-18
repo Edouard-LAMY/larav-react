@@ -31,14 +31,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // IMAGES
         Route::get('settings/images', [ImageController::class, 'index'])->name('image.index');
-        Route::get('settings/create-image/', [ImageController::class, 'create'])->name('image.create');
-        Route::post('settings/create-image/', [ImageController::class, 'store'])->name('image.store');
+        Route::post('settings/create-image', [ImageController::class, 'store'])->name('image.store');
         Route::put('settings/update-image/{image}', [ImageController::class, 'update'])->name('image.update');
         Route::post('settings/update-image/{image}', [ImageController::class, 'delete'])->name('image.delete');
 
         // SLIDERS
-        Route::get('settings/sliders', [SliderController::class, 'index'])->name('image.index');
-        Route::post('settings/create-slider/', [SliderController::class, 'store'])->name('slider.store');
+        Route::get('settings/sliders', [SliderController::class, 'index'])->name('slider.index');
+        Route::post('settings/create-slider', [SliderController::class, 'store'])->name('slider.store');
         Route::put('settings/update-slider/{slider}', [SliderController::class, 'update'])->name('slider.update');
         Route::post('settings/update-slider/{slider}', [SliderController::class, 'delete'])->name('slider.delete');
     });

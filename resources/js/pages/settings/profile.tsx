@@ -24,7 +24,7 @@ type ProfileForm = {
     lastname: string;
     firstname: string;
     email: string;
-    roles: any[];
+    roles: Roles[];
 }
 
 export default function Profile({ mustVerifyEmail, status, roles, rolesUser }: { mustVerifyEmail: boolean; status?: string; roles: Roles[], rolesUser: any}) {
@@ -115,7 +115,7 @@ export default function Profile({ mustVerifyEmail, status, roles, rolesUser }: {
                                 value={data.email}
                                 onChange={(e) => setData('email', e.target.value)}
                                 required
-                                autoComplete="username"
+                                autoComplete="email"
                                 placeholder="Email address"
                             />
 
