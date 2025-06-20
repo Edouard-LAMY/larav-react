@@ -23,7 +23,7 @@ class SliderController extends Controller
     {
         $saved = Slider::create($request->all());
 
-        return back()->with('saved', $saved);
+        return back()->with('saved', "La slide a bien été ajoutée.");
     }
 
     public function edit(int $slider): View

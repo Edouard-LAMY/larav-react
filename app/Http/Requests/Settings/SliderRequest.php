@@ -31,7 +31,6 @@ class SliderRequest extends FormRequest
             'text_button'       => 'string|nullable',
             'button_style'      => 'string|nullable',
             'button_link'       => 'required',
-            'image_id'          => 'required|integer',
             'is_active'         => 'boolean',
         ];
     }
@@ -49,8 +48,6 @@ class SliderRequest extends FormRequest
             'background_color.string'           => 'La couleur du fond doit être textuel.',
             'text_button.string'                => 'Le texte du bouton doit être textuel',
             'button_link.required'              => 'Un lien pour le bouton est obligatoire.',
-            'image_id.integer'                  => 'L\'image doit être un entier.',
-            'image_id.required'                 => 'Une image est obligatoire.',
             'is_active.boolean'                 => 'L\'activation doit être un booléen.',
         ];
     }

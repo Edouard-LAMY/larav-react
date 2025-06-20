@@ -48,7 +48,7 @@ export const fetchSliders = async (): Promise<Slider[]> => {
 }
 
 // ------------------- IMAGE ------------------ //
-export const fetchImage = async (formData: FormData): Promise<Image> => {
+export const fetchImage = async (formData: FormData): Promise<T> => {
   const { data } = await api.post<Image>('settings/create-image', formData);
   return data;
 }

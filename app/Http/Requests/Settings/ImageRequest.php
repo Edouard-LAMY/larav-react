@@ -22,6 +22,7 @@ class ImageRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'image'      => 'required',
             'name'      => 'required|min:3|max:80',
             'legend'    => 'required|min:3|max:150',
             'alt'       => 'required|min:3|max:150',
@@ -36,6 +37,8 @@ class ImageRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'image.required'    => 'Une image est requis',
+
             'name.required'     => 'Un nom est requis',
             'name.min'          => 'Le nom doit contenir au moins 3 caractères',
             'name.max'          => 'Le nom doit contenir au maximum 80 caractères',

@@ -10,6 +10,7 @@ use App\Repositories\ImageRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Settings\ImageRequest;
+use Illuminate\Http\JsonResponse;
 
 class ImageController extends Controller
 {
@@ -29,10 +30,10 @@ class ImageController extends Controller
     /**
      * Creates a new Image through the POST data received, then redirects to the list route.
      */
-    public function store(ImageRequest $request): RedirectResponse|int
+    public function store(ImageRequest $request): JsonResponse
     {
         $image                  = new Image;
-        $image->name            = $request->image_name;
+        $image->name            = $request->name;
         $image->legend          = $request->legend;
         $image->alt             = $request->alt;
 
@@ -40,17 +41,21 @@ class ImageController extends Controller
 
         $format_image_original_name = '';
 
-        if ($request->file('file')) {
-            $format_image_original_name = $request->file('file')->getClientOriginalName().Image::generateRandomString();
+        if ($request->file('image')) {
+            $format_image_original_name = $request->file('image')->getClientOriginalName().Image::generateRandomString();
         }
 
         $realNameNoExt = now()->year.'/'.$month.'/'.Image::formatImageName($format_image_original_name);
 
-        Storage::disk('public')->putFileAs('images/original/', $request->file('file'), $realNameNoExt.'.jpg', 'public');
+        Storage::disk('public')->putFileAs('images/original/', $request->file('image'), $realNameNoExt.'.jpg', 'public');
+        // Storage::disk('public')->put('images/original/'.$realNameNoExt.'.jpg', $request->file('image'));
 
         $image->save();
 
-        return back()->with('saved', $image->id);
+        // return redirect()->back()->with('saved', $image->id);
+        return response()->json([
+            'image_id' => $image->id,
+        ]);
     }
 
     /**

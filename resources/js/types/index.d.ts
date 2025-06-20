@@ -30,6 +30,17 @@ export interface SharedData {
     [key: string]: unknown;
 }
 
+// ------ MESSAGE FLASH ------ 
+export type MessageFlash = {
+    flash?: {
+      saved?: string;
+      updated?: string;
+      deleted?: string;
+    };
+}
+
+
+
 // ------ USER ------ 
 export type User = {
     id: number;
