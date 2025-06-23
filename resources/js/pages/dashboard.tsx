@@ -2,7 +2,7 @@ import { SliderCreate } from '@/components/Sliders/SliderCreate';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
-import { MessageFlash, type BreadcrumbItem } from '@/types';
+import { MessageFlash, Slider, type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -13,7 +13,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Dashboard({userCounter}: {userCounter: number}) {
+export default function Dashboard({userCounter, sliders}: {userCounter: number, sliders: Slider[]}) {
+
+
+    console.log('====================================');
+    console.log('on est la ', sliders);
+    console.log('====================================');
 
     // Modal Create Slider
     const [isModalCreateSliderOpen, setModalCreateSliderOpen] = useState<boolean>(false);
@@ -62,6 +67,13 @@ export default function Dashboard({userCounter}: {userCounter: number}) {
                         Créer un slider
                     </button>
                     <SliderCreate open={isModalCreateSliderOpen} onClose={() => setModalCreateSliderOpen(!isModalCreateSliderOpen)} />
+                    {sliders?.map(slider => (
+                        <div className={`grid auto-rows-min gap-4 h-20 w-full border-sidebar-border/70 dark:border-sidebar-border relative aspect-video overflow-hidden rounded-xl border-3 bg-[url(slider.image)]`}>
+                                {slider.title + ' ' + slider.subtitle}
+                        </div>
+                    ))
+
+                    }
                 </div>
             </div>
         </AppLayout>

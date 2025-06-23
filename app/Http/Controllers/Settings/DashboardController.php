@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Models\Slider;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,8 +15,11 @@ class DashboardController extends Controller
     {
         $userCounter = User::count();
 
+        $sliders = Slider::orderBy('updated_at', 'desc')->get();
+
         return Inertia::render('dashboard', [
-            'userCounter' => $userCounter,
+            'userCounter'   => $userCounter,
+            'sliders'       => $sliders,
         ]);
     }
 }
