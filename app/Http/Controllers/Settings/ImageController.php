@@ -32,27 +32,32 @@ class ImageController extends Controller
      */
     public function store(ImageRequest $request): JsonResponse
     {
-        $image                  = new Image;
-        $image->name            = $request->name;
-        $image->legend          = $request->legend;
-        $image->alt             = $request->alt;
+        $imageExist = Image::where('name', $request->name)->first();
 
-        $month                  = now()->month < 10 ? '0'.now()->month : now()->month;
-
-        $format_image_original_name = '';
-
-        if ($request->file('image')) {
-            $format_image_original_name = $request->file('image')->getClientOriginalName().Image::generateRandomString();
+        if (!$imageExist) {
+            $image                  = new Image;
+            $image->name            = $request->name;
+            $image->legend          = $request->legend;
+            $image->alt             = $request->alt;
+    
+            $month                  = now()->month < 10 ? '0'.now()->month : now()->month;
+    
+            $format_image_original_name = '';
+    
+            if ($request->file('image')) {
+                $format_image_original_name = $request->file('image')->getClientOriginalName().Image::generateRandomString();
+            }
+    
+            $realNameNoExt = now()->year.'/'.$month.'/'.Image::formatImageName($format_image_original_name);
+    
+            Storage::disk('public')->putFileAs('images/original/', $request->file('image'), $realNameNoExt.'.jpg', 'public');
+    
+            $image->path            = $realNameNoExt;
+            $image->save();
+        } else {
+            $image = $imageExist;
         }
 
-        $realNameNoExt = now()->year.'/'.$month.'/'.Image::formatImageName($format_image_original_name);
-
-        Storage::disk('public')->putFileAs('images/original/', $request->file('image'), $realNameNoExt.'.jpg', 'public');
-        // Storage::disk('public')->put('images/original/'.$realNameNoExt.'.jpg', $request->file('image'));
-
-        $image->save();
-
-        // return redirect()->back()->with('saved', $image->id);
         return response()->json([
             'image_id' => $image->id,
         ]);

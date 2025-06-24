@@ -1,5 +1,5 @@
 import { useForm } from '@inertiajs/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import InputError from '../input-error';
 import { Modal } from '../ui/Modal';
 import { Input } from '../ui/input';
@@ -11,15 +11,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { ButtonStyle } from '@/types/enum';
 import { Checkbox } from '../ui/checkbox';
 import { fetchImage } from '@/lib/query';
-
+import { Slider } from '@/types';
 interface Props {
     open: boolean;
     onClose: () => void;
+    slider?: Slider | null; 
 }
 
-export function SliderCreate({ open, onClose }: Props) {
+export function SliderCreate({ open, onClose, slider }: Props) {
+    //State for hidden input annuler
+    const [isHidden, setIsHidden] = useState<boolean>(true);
+    const [titleForm, setTitleForm] = useState<string>("Ajouter un slider");
+
     // useForm Slider
-    const { data: sliderData, setData: setSliderData, post: postSlider, processing: processingSlider, reset: resetSlider, errors: errorSlider } = useForm({
+    const { data: sliderData, setData: setSliderData, post: postSlider, put: putSlider, processing: processingSlider, reset: resetSlider, errors: errorSlider, transform } = useForm({
         title: '',
         subtitle: '',
         message: '',
@@ -57,6 +62,12 @@ export function SliderCreate({ open, onClose }: Props) {
             //reset errors
             setImageError({});
 
+            // set image_id via transform (update data form) before handleSubmit
+            transform((sliderData) => ({
+                ...sliderData,
+                image_id: response.image_id,
+            }))
+
             return response;
         } catch (error: any) {
             // gestion des erreurs
@@ -79,33 +90,58 @@ export function SliderCreate({ open, onClose }: Props) {
         const uploadedImage: any = await sendImage();
 
         if (uploadedImage) {
-            // set l'image_id
-            setSliderData({
-                ...sliderData,
-                image_id: uploadedImage.image_id,
-            });
-    
             postSlider(route('slider.store'), {
                 preserveScroll: true,
                 onSuccess: () => {
                     resetSlider();
                     onClose();
-                    //envoyer un message de success
+                    resetImage()
                 },
             });
         }
-
     };
 
     useEffect(() => {
-        if (!open) resetSlider();
-    }, [open]);
+        if (!open) {
+            resetSlider();
+            resetImage();
+            setIsHidden(true);
+            setTitleForm('Ajouter un slider');
+        }
+        //if updating case
+        if (open && slider) {
+            setSliderData('title', slider.title || '');
+            setSliderData('subtitle', slider.subtitle || '');
+            setSliderData('message', slider.message || '');
+            setSliderData('title_color', slider.title_color || '#000000');
+            setSliderData('subtitle_color', slider.subtitle_color || '#000000');
+            setSliderData('background_color', slider.background_color || '#000000');
+            setSliderData('text_button', slider.text_button || '');
+            setSliderData('button_style', slider.button_style || ButtonStyle.Standard);
+            setSliderData('button_link', slider.button_link || '');
+            setSliderData('is_active', !!slider.is_active);
+            setSliderData('image_id', slider.image_id || '');
 
-    if (!open) return null;
+            //display show input cancel in modal
+            setIsHidden(false);
+
+            //Change title form
+            setTitleForm('Modifier le slider');
+
+            if (slider.image) {
+                setImageData({
+                    image: null,
+                    name: slider.image.name || '',
+                    alt: slider.image.alt || '',
+                    legend: slider.image.legend || '',
+                });
+            }
+        }
+    }, [open, slider]);
 
     return (
         <Modal show={open} onClose={onClose}>
-            <h3 className='mb-5 font-bold text-lg text-black'>Ajouter un slider</h3>
+            <h3 className='mb-5 font-bold text-lg text-black'>{titleForm}</h3>
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                 <div className="grid grid-cols-3 gap-6">
                     <div className="grid gap-2 col-span-2">
@@ -172,15 +208,19 @@ export function SliderCreate({ open, onClose }: Props) {
 
                 <div className="grid gap-2">
                     <Label htmlFor="button_link" className={`text-black`}>Lien du bouton</Label>
-                        <Input id="button_link" type="text" className={`text-black`} required autoFocus tabIndex={1} autoComplete="button_link" value={sliderData.button_link} onChange={(e) => setSliderData('button_link', e.target.value)} placeholder="https://mon-site.fr" />
+                    <Input id="button_link" type="text" className={`text-black`} required autoFocus tabIndex={1} autoComplete="button_link" value={sliderData.button_link} onChange={(e) => setSliderData('button_link', e.target.value)} placeholder="https://mon-site.fr" />
                     <InputError message={errorSlider.button_link} />
                 </div>
                 <div className="grid grid-cols-2 gap-6">
                     <div className="grid gap-2">
                         <Label htmlFor="text_button" className={`text-black`}>Style du bouton</Label>
-                        <Select value={sliderData.button_style} onValueChange={(value) => setSliderData("button_style", value as ButtonStyle)}>
+                        <Select value={slider ? slider.button_style : sliderData.button_style} onValueChange={(value) => setSliderData("button_style", value as ButtonStyle)}>
                             <SelectTrigger>
-                                <SelectValue placeholder="Style de bouton"  />
+                                <SelectValue placeholder="Style de bouton">
+                                    {
+                                        Object.entries(ButtonStyle).find(([, val]) => val === sliderData.button_style)?.[0]
+                                    }
+                                </SelectValue>
                             </SelectTrigger>
                             <SelectContent>
                                 {Object.entries(ButtonStyle).map(([label, val]) => (
@@ -190,6 +230,7 @@ export function SliderCreate({ open, onClose }: Props) {
                                 ))}
                             </SelectContent>
                         </Select>
+                        <InputError message={errorSlider.button_style} />
                     </div>
 
                     <div className="grid gap-2">
@@ -204,12 +245,11 @@ export function SliderCreate({ open, onClose }: Props) {
                     <Checkbox className='mt-2' checked={sliderData.is_active} onCheckedChange={(checked) => setSliderData("is_active", !!checked)}/>
                 </div>
 
-
                 <Button type="submit" className="m-auto mt-4 w-full cursor-pointer bg-linear-20 from-sky-200 via-blue-400 to-indigo-900 to-90%" tabIndex={4} disabled={processingSlider} >
                     {processingSlider && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                    Créer
+                    {slider ? 'Modifier' : 'Créer'}
                 </Button>
-
+                <button onClick={onClose} hidden={isHidden} className={`m-auto w-full rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b] cursor-pointer`}>Annuler</button>
             </form>
         </Modal>
     );

@@ -73,8 +73,9 @@ export type Slider = {
     text_button: string;
     button_style: ButtonStyle;
     button_link: string;
-    image_id: number;
+    image_id: string;
     is_active: boolean;
+    image?: { name: string; alt: string; legend: string; url: string; };
 }
 
 // ------ IMAGES ------ 
@@ -83,4 +84,5 @@ export type Image = {
     name: string;
     legend: string;
     alt: string;
+    path: string;
 }

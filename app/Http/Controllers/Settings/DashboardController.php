@@ -15,7 +15,7 @@ class DashboardController extends Controller
     {
         $userCounter = User::count();
 
-        $sliders = Slider::orderBy('updated_at', 'desc')->get();
+        $sliders = Slider::orderBy('updated_at', 'desc')->with('image')->get();
 
         return Inertia::render('dashboard', [
             'userCounter'   => $userCounter,

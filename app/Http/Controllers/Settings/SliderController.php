@@ -21,9 +21,17 @@ class SliderController extends Controller
 
     public function store(SliderRequest $request): RedirectResponse
     {
-        $saved = Slider::create($request->all());
+        $sliderExist    = Slider::where('title', $request->title)->first();
+        $saved          = "La slide a bien été ajoutée.";
 
-        return back()->with('saved', "La slide a bien été ajoutée.");
+        if (!$sliderExist) {
+            Slider::create($request->all());
+        } else {
+            Slider::update($request->all());
+            $saved = "La slide a bien été modifié.";
+        }
+
+        return back()->with('saved', $saved);
     }
 
     public function edit(int $slider): View
