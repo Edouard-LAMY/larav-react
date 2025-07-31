@@ -12,7 +12,7 @@ import { ButtonStyle } from '@/types/enum';
 import { Checkbox } from '../ui/checkbox';
 import { fetchImage } from '@/lib/query';
 import { Slider } from '@/types';
-interface Props {
+type Props = {
     open: boolean;
     onClose: () => void;
     slider?: Slider | null; 
@@ -86,10 +86,7 @@ export function SliderCreate({ open, onClose, slider }: Props) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        //create Image
-        const uploadedImage: any = await sendImage();
-
-        if (uploadedImage) {
+        if (slider?.image) {
             postSlider(route('slider.store'), {
                 preserveScroll: true,
                 onSuccess: () => {
@@ -98,6 +95,20 @@ export function SliderCreate({ open, onClose, slider }: Props) {
                     resetImage()
                 },
             });
+        } else {
+            //create Image
+            const uploadedImage: any = await sendImage();
+            
+            if (uploadedImage) {
+                postSlider(route('slider.store'), {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        resetSlider();
+                        onClose();
+                        resetImage()
+                    },
+                });
+            }
         }
     };
 
@@ -184,6 +195,11 @@ export function SliderCreate({ open, onClose, slider }: Props) {
                 <div className="grid grid-cols-3 gap-6">
                     <div className="grid gap-2">
                         <Label htmlFor='file' className={`text-black`}>Image</Label>
+                        {slider?.image?.url && (
+                            <div className="">
+                                <img src={slider.image.url} alt={slider.image.alt} className="h-10 w-auto rounded" />
+                            </div>
+                        )}
                         <input type="file" onChange={(e) => setImageData('image', e.target.files?.[0] ?? null)} className={`cursor-pointer rounded-md border bg-transparent px-3 py-1 text-base shadow-xs md:text-sm w-full min-w-0 ${errorImage.image ? 'border-red-500' : ''}`}/>
                         <InputError message={errorImage.image} />
                     </div>

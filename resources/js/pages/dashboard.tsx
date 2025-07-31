@@ -70,8 +70,17 @@ export default function Dashboard({userCounter, sliders}: {userCounter: number, 
                     <SliderCreate open={isModalCreateSliderOpen} onClose={() => setModalCreateSliderOpen(!isModalCreateSliderOpen)} slider={editingSlider}/>
                     {sliders?.map(slider => (
                         <div className="flex items-center w-full">
-                            <div className={`flex h-80 w-full border-sidebar-border/70 dark:border-sidebar-border aspect-video overflow-hidden rounded-xl border-3 mb-3 mx-5`} key={slider.id} style={{ background: `url("${slider.image?.url}")` }}>
-                                    {slider.title + ' ' + slider.subtitle} 
+                            <div className={`flex h-80 w-full dark:border-sidebar-border aspect-video overflow-hidden rounded-xl border-3 mb-3 mx-5 shadow-xl`} key={slider.id} 
+                            style={{
+                                background: `linear-gradient(to bottom, rgba(255, 255, 255, 0) 40%, ${slider.background_color}),
+                                url("${slider.image?.url}") no-repeat center/cover`
+                            }}
+                            >
+                                <div className="row p-15">
+                                    <h2 className='text-[26px] text-2xl font-bold' style={{ color: slider.title_color }}>{slider.title}</h2>
+                                    <h3 style={{ color: slider.subtitle_color }}>{slider.subtitle}</h3>
+                                    <p className='text-[16px] mt-6 w-150' style={{ color: slider.title_color }}>{slider.message}</p>
+                                </div>
                             </div>
                             <button onClick={() => {setEditingSlider(slider); setModalCreateSliderOpen(true);} } className="rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b] cursor-pointer w-40 mr-5">
                                 Modifier

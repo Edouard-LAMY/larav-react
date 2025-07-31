@@ -27,7 +27,7 @@ class SliderController extends Controller
         if (!$sliderExist) {
             Slider::create($request->all());
         } else {
-            Slider::update($request->all());
+            $sliderExist->update($request->all());
             $saved = "La slide a bien été modifié.";
         }
 
