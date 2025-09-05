@@ -127,8 +127,8 @@ export function SliderCreate({ open, onClose, slider }: Props) {
             setSliderData('title_color', slider.title_color || '#000000');
             setSliderData('subtitle_color', slider.subtitle_color || '#000000');
             setSliderData('background_color', slider.background_color || '#000000');
-            setSliderData('text_button', slider.text_button || '');
             setSliderData('button_style', slider.button_style || ButtonStyle.Standard);
+            setSliderData('text_button', slider.text_button || '');
             setSliderData('button_link', slider.button_link || '');
             setSliderData('is_active', !!slider.is_active);
             setSliderData('image_id', slider.image_id || '');
@@ -200,7 +200,7 @@ export function SliderCreate({ open, onClose, slider }: Props) {
                                 <img src={slider.image.url} alt={slider.image.alt} className="h-10 w-auto rounded" />
                             </div>
                         )}
-                        <input type="file" onChange={(e) => setImageData('image', e.target.files?.[0] ?? null)} className={`cursor-pointer rounded-md border bg-transparent px-3 py-1 text-base shadow-xs md:text-sm w-full min-w-0 ${errorImage.image ? 'border-red-500' : ''}`}/>
+                        <input type="file" onChange={(e) => setImageData('image', e.target.files?.[0] ?? null)} className={`cursor-pointer rounded-md border bg-transparent px-3 py-1 text-base shadow-xs md:text-sm w-full min-w-0 text-black ${errorImage.image ? 'border-red-500' : ''}`}/>
                         <InputError message={errorImage.image} />
                     </div>
                     <div className="grid gap-2 col-span-2">
@@ -231,7 +231,7 @@ export function SliderCreate({ open, onClose, slider }: Props) {
                     <div className="grid gap-2">
                         <Label htmlFor="text_button" className={`text-black`}>Style du bouton</Label>
                         <Select value={slider ? slider.button_style : sliderData.button_style} onValueChange={(value) => setSliderData("button_style", value as ButtonStyle)}>
-                            <SelectTrigger>
+                            <SelectTrigger className={`text-black`}>
                                 <SelectValue placeholder="Style de bouton">
                                     {
                                         Object.entries(ButtonStyle).find(([, val]) => val === sliderData.button_style)?.[0]
